@@ -1,24 +1,56 @@
 import React, { useState } from 'react';
-import { ShieldAlert, ExternalLink, Send, MessageCircle, Download, Smartphone } from 'lucide-react';
+import { ExternalLink, Send, MessageCircle, Download } from 'lucide-react';
 import { OWNER_CONTACT } from '../data/ownerData';
 import { PlatformConfig } from '../types';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { AppLogo } from './AppLogo';
 
 interface NavbarProps {
   currentPlatform: PlatformConfig;
   onOpenInstallModal?: () => void;
+  onOpenOwnerPanel?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentPlatform, onOpenInstallModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  currentPlatform, 
+  onOpenInstallModal,
+  onOpenOwnerPanel,
+}) => {
   const { isInstallable, install } = usePWAInstall();
+  const [clickCount, setClickCount] = useState(0);
+  const [clickToast, setClickToast] = useState<string | null>(null);
+
+  const handleLogoClick = () => {
+    const nextCount = clickCount + 1;
+    setClickCount(nextCount);
+
+    if (nextCount >= 10 && nextCount < 20) {
+      setClickToast(`بقي ${20 - nextCount} نقرات...`);
+      setTimeout(() => setClickToast(null), 2000);
+    } else if (nextCount >= 20) {
+      setClickCount(0);
+      setClickToast('تم فتح لوحة التحكم المخصصة للمالك!');
+      setTimeout(() => setClickToast(null), 2000);
+      if (onOpenOwnerPanel) {
+        onOpenOwnerPanel();
+      }
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200" dir="rtl">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 select-none" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 to-rose-600 text-white flex items-center justify-center shadow-xs">
-            <ShieldAlert className="w-6 h-6" />
-          </div>
+        
+        {/* Brand Logo & Title with 20-Click Trigger & AppLogo (Letter R) */}
+        <div 
+          onClick={handleLogoClick}
+          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group relative"
+          title="انقر 20 مرة للوصول للوحة المالك"
+          id="btn-navbar-logo-trigger"
+        >
+          {/* App Logo Component with Letter R */}
+          <AppLogo size="md" />
+
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 leading-tight">
@@ -29,9 +61,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPlatform, onOpenInstallMo
               </span>
             </div>
             <p className="text-[11px] text-slate-500 hidden sm:block">
-              {OWNER_CONTACT.brandName} • بوابات الطوارئ الرسمية لجميع المنصات
+              {OWNER_CONTACT.brandName} • بوابات الطوارئ والاستشارات التقنية
             </p>
           </div>
+
+          {/* Secret Tap Countdown Toast */}
+          {clickToast && (
+            <div className="absolute top-12 right-0 bg-slate-900 text-amber-300 text-[11px] font-bold px-3 py-1.5 rounded-xl border border-amber-400/40 shadow-xl z-50 animate-bounce whitespace-nowrap">
+              {clickToast}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2.5">

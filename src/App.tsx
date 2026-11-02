@@ -6,8 +6,11 @@
 import React, { useState } from 'react';
 import { PlatformId } from './types';
 import { PLATFORMS_DATA } from './data/platformsData';
+import { useActivationStore } from './hooks/useActivationStore';
 import { Navbar } from './components/Navbar';
 import { PWAInstallBanner } from './components/PWAInstallBanner';
+import { UserActivationScreen } from './components/UserActivationScreen';
+import { OwnerPanelModal } from './components/OwnerPanelModal';
 import { PlatformTabs } from './components/PlatformTabs';
 import { AccountTargetBanner } from './components/AccountTargetBanner';
 import { OwnerContactCard } from './components/OwnerContactCard';
@@ -21,67 +24,162 @@ import { OfficialLinksCard } from './components/OfficialLinksCard';
 import { ScamWarning } from './components/ScamWarning';
 import { NotificationCenter } from './components/NotificationCenter';
 import { Footer } from './components/Footer';
+import { ShieldCheck, LogOut } from 'lucide-react';
 
 export default function App() {
   const [activePlatformId, setActivePlatformId] = useState<PlatformId>('google');
+  const [showOwnerModal, setShowOwnerModal] = useState(false);
+
+  // Activation Store
+  const {
+    codes,
+    userSession,
+    isActivated,
+    isOwnerLoggedIn,
+    ownerCredentials,
+    ownerConfig,
+    subscribers,
+    activateUser,
+    logoutUser,
+    loginOwner,
+    logoutOwner,
+    addCodes,
+    deleteCode,
+    toggleCodeStatus,
+    resetAllCodesToUnused,
+    updateOwnerCredentials,
+    updateOwnerConfig,
+  } = useActivationStore();
 
   const currentPlatform = PLATFORMS_DATA[activePlatformId] || PLATFORMS_DATA.google;
 
+  // STRICT LOCK: Main application features unlocked ONLY when user has valid activation or owner is logged in
+  const isContentUnlocked = isActivated || isOwnerLoggedIn;
+
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 font-sans selection:bg-red-100 selection:text-red-900 antialiased">
-      <Navbar currentPlatform={currentPlatform} />
+      {/* Navigation Header with Logo R */}
+      <Navbar 
+        currentPlatform={currentPlatform}
+        onOpenOwnerPanel={() => setShowOwnerModal(true)}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6">
+        
         {/* PWA Mobile & Desktop Install Banner */}
         <PWAInstallBanner />
 
         {/* Identity & Main Advisory Banner: المهندس الاستشاري رقيب */}
         <AccountTargetBanner currentPlatform={currentPlatform} />
 
-        {/* Platform Selector Tabs */}
-        <PlatformTabs 
-          activePlatformId={activePlatformId} 
-          onSelectPlatform={(id) => {
-            setActivePlatformId(id);
-            window.scrollTo({ top: 120, behavior: 'smooth' });
-          }} 
-        />
+        {/* Active Subscriber Session Badge (if logged in) */}
+        {isActivated && userSession && (
+          <div className="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm shadow-md" dir="rtl">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-white">حسابك مفعّل بنجاح:</span>
+                  <span className="font-mono text-emerald-400 font-bold" dir="ltr">{userSession.identity}</span>
+                </div>
+                <div className="text-slate-400 text-xs font-mono">
+                  كود الاشتراك: <span className="text-amber-300 font-bold">{userSession.code}</span> | تاريخ التفعيل: {userSession.activatedAt}
+                </div>
+              </div>
+            </div>
 
-        {/* Push Notification Center & Security Alerts */}
-        <NotificationCenter />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={logoutUser}
+                className="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>تسجيل الخروج من التفعيل</span>
+              </button>
+            </div>
+          </div>
+        )}
 
-        {/* Owner Contact Card (Phone +967785502919, Email, Websites, Telegram Bot) */}
-        <OwnerContactCard />
+        {/* -------------------- USER ACTIVATION SCREEN -------------------- */}
+        {!isContentUnlocked && (
+          <UserActivationScreen
+            onActivate={activateUser}
+            userSession={userSession}
+            ownerConfig={ownerConfig}
+            onOpenOwnerLogin={() => setShowOwnerModal(true)}
+          />
+        )}
 
-        {/* Immediate Platform-Specific Hacked Solution (Passkey, 2FA, PIN, etc.) */}
-        <CriticalHackedSolution currentPlatform={currentPlatform} />
+        {/* -------------------- UNLOCKED MAIN APP CONTENT -------------------- */}
+        {isContentUnlocked && (
+          <>
+            {/* Platform Selector Tabs */}
+            <PlatformTabs 
+              activePlatformId={activePlatformId} 
+              onSelectPlatform={(id) => {
+                setActivePlatformId(id);
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+              }} 
+            />
 
-        {/* Readiness assessment and success probability */}
-        <ReadinessAssessment currentPlatform={currentPlatform} />
+            {/* Push Notification Center & Security Alerts */}
+            <NotificationCenter />
 
-        {/* Interactive troubleshooter for common platform hurdles */}
-        <InteractiveTroubleshooter currentPlatform={currentPlatform} />
+            {/* Owner Contact Card (Phone +967785502919, Email, Websites, Telegram Bot) */}
+            <OwnerContactCard />
 
-        {/* Step-by-step roadmap */}
-        <StepByStepGuide currentPlatform={currentPlatform} />
+            {/* Immediate Platform-Specific Hacked Solution (Passkey, 2FA, PIN, etc.) */}
+            <CriticalHackedSolution currentPlatform={currentPlatform} />
 
-        {/* All Platforms Emergency Matrix */}
-        <AllPlatformsOverview 
-          onSelectPlatform={(id) => {
-            setActivePlatformId(id);
-            window.scrollTo({ top: 120, behavior: 'smooth' });
-          }} 
-        />
+            {/* Readiness assessment and success probability */}
+            <ReadinessAssessment currentPlatform={currentPlatform} />
 
-        {/* Post recovery security checklist */}
-        <PostRecoverySecurity currentPlatform={currentPlatform} />
+            {/* Interactive troubleshooter for common platform hurdles */}
+            <InteractiveTroubleshooter currentPlatform={currentPlatform} />
 
-        {/* Official Direct Links */}
-        <OfficialLinksCard currentPlatform={currentPlatform} />
+            {/* Step-by-step roadmap */}
+            <StepByStepGuide currentPlatform={currentPlatform} />
 
-        {/* Universal Scam Warning */}
-        <ScamWarning />
+            {/* All Platforms Emergency Matrix */}
+            <AllPlatformsOverview 
+              onSelectPlatform={(id) => {
+                setActivePlatformId(id);
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+              }} 
+            />
+
+            {/* Post recovery security checklist */}
+            <PostRecoverySecurity currentPlatform={currentPlatform} />
+
+            {/* Official Direct Links */}
+            <OfficialLinksCard currentPlatform={currentPlatform} />
+
+            {/* Universal Scam Warning */}
+            <ScamWarning />
+          </>
+        )}
       </main>
+
+      {/* Secret Owner Control Panel Modal */}
+      <OwnerPanelModal
+        isOpen={showOwnerModal}
+        onClose={() => setShowOwnerModal(false)}
+        isOwnerLoggedIn={isOwnerLoggedIn}
+        onLoginOwner={loginOwner}
+        onLogoutOwner={logoutOwner}
+        codes={codes}
+        subscribers={subscribers}
+        ownerCredentials={ownerCredentials}
+        ownerConfig={ownerConfig}
+        onAddCodes={addCodes}
+        onDeleteCode={deleteCode}
+        onToggleCodeStatus={toggleCodeStatus}
+        onResetAllCodes={resetAllCodesToUnused}
+        onUpdateOwnerCredentials={updateOwnerCredentials}
+        onUpdateOwnerConfig={updateOwnerConfig}
+      />
 
       <Footer />
     </div>
