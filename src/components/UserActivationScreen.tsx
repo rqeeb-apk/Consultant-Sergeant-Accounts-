@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { 
   ShieldCheck, 
   Key, 
-  Phone, 
-  Mail, 
   Send, 
   MessageCircle, 
-  CreditCard, 
   CheckCircle2, 
   AlertCircle, 
   Copy, 
@@ -18,6 +15,7 @@ import {
 import { OWNER_CONTACT } from '../data/ownerData';
 import { OwnerConfig, UserSession } from '../hooks/useActivationStore';
 import { AppLogo } from './AppLogo';
+import { useLanguage } from '../context/LanguageContext';
 
 interface UserActivationScreenProps {
   onActivate: (identity: string, code: string) => { success: boolean; message: string };
@@ -32,6 +30,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
   ownerConfig,
   onOpenOwnerLogin,
 }) => {
+  const { language, t } = useLanguage();
   const [identity, setIdentity] = useState('');
   const [code, setCode] = useState('');
   const [feedback, setFeedback] = useState<{ success: boolean; text: string } | null>(null);
@@ -51,7 +50,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
   };
 
   return (
-    <section className="bg-slate-900 text-white rounded-3xl p-5 sm:p-8 shadow-2xl border border-slate-800 relative overflow-hidden my-6" dir="rtl">
+    <section className="bg-slate-900 text-white rounded-3xl p-5 sm:p-8 shadow-2xl border border-slate-800 relative overflow-hidden my-6">
       {/* Background glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -63,20 +62,20 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
 
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-amber-600 text-white text-xs font-extrabold px-4 py-1.5 rounded-full shadow-md">
             <Award className="w-4 h-4 text-amber-200" />
-            <span>منصة المهندس الاستشاري رقيب التقنية</span>
+            <span>{t('appTitle')}</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            تفعيل الاشتراك المشترك ودخول المنصة
+            {t('activationTitle')}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            {ownerConfig.announcementText}
+            {t('activationSubtitle')}
           </p>
 
           <div className="inline-flex items-center gap-2 bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs px-4 py-2 rounded-xl">
             <Lock className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>الاستخدام مقتصر تماماً على المفعّلين باشتراك رسمي بعد إدخال كود التفعيل المستلم من المالك.</span>
+            <span>{t('lockedMessage')}</span>
           </div>
         </div>
 
@@ -89,24 +88,24 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
               </div>
               <div>
                 <h3 className="text-base font-bold text-white">
-                  خطوات تفعيل الاشتراك المشترك (قيمة الاشتراك: {ownerConfig.subscriptionPrice})
+                  {language === 'ar' ? `خطوات تفعيل الاشتراك المشترك (قيمة الاشتراك: ${ownerConfig.subscriptionPrice})` : `Subscription Activation Steps (${ownerConfig.subscriptionPrice})`}
                 </h3>
                 <p className="text-xs text-slate-400">
-                  قم بتحويل مبلغ {ownerConfig.subscriptionPrice} عبر رقم المحفظة لاستلام كود التفعيل المخصص لك
+                  {language === 'ar' ? `قم بتحويل مبلغ ${ownerConfig.subscriptionPrice} عبر رقم المحفظة لاستلام كود التفعيل المخصص لك` : `Transfer ${ownerConfig.subscriptionPrice} via wallet number to receive your code`}
                 </p>
               </div>
             </div>
 
             <span className="text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-full self-start sm:self-auto">
-              رسوم التفعيل: {ownerConfig.subscriptionPrice}
+              {language === 'ar' ? `رسوم التفعيل: ${ownerConfig.subscriptionPrice}` : `Price: ${ownerConfig.subscriptionPrice}`}
             </span>
           </div>
 
           {/* Wallet Number Card */}
           <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="space-y-1 text-center sm:text-right">
+            <div className="space-y-1 text-center ltr:sm:text-left rtl:sm:text-right">
               <span className="text-xs text-slate-400 font-medium block">
-                رقم المحفظة المعتمد ({ownerConfig.walletName}):
+                {language === 'ar' ? `رقم المحفظة المعتمد (${ownerConfig.walletName}):` : `Wallet Number (${ownerConfig.walletName}):`}
               </span>
               <div className="font-mono text-lg font-bold text-emerald-400" dir="ltr">
                 {ownerConfig.walletPhone}
@@ -120,7 +119,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
                 id="btn-copy-wallet-number"
               >
                 {copiedWallet ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                <span>{copiedWallet ? 'تم نسخ الرقم' : 'نسخ رقم المحفظة'}</span>
+                <span>{copiedWallet ? (language === 'ar' ? 'تم نسخ الرقم' : 'Copied!') : (language === 'ar' ? 'نسخ رقم المحفظة' : 'Copy Wallet Number')}</span>
               </button>
 
               <a
@@ -131,7 +130,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
                 id="btn-whatsapp-request-code"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>إرسال الإشعار واتساب</span>
+                <span>{language === 'ar' ? 'إرسال الإشعار واتساب' : 'Send WhatsApp Proof'}</span>
               </a>
             </div>
           </div>
@@ -139,11 +138,11 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
             <div className="flex items-center gap-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-800">
               <span className="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">1</span>
-              <span>قم بتحويل {ownerConfig.subscriptionPrice} إلى رقم المحفظة {ownerConfig.walletPhone}.</span>
+              <span>{language === 'ar' ? `قم بتحويل ${ownerConfig.subscriptionPrice} إلى رقم المحفظة ${ownerConfig.walletPhone}.` : `Transfer ${ownerConfig.subscriptionPrice} to wallet ${ownerConfig.walletPhone}.`}</span>
             </div>
             <div className="flex items-center gap-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-800">
               <span className="w-5 h-5 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0">2</span>
-              <span>أرسل صورة الإشعار للمهندس رقيب عبر الواتساب أو التيليجرام لاستلام كود التفعيل الخاص بك.</span>
+              <span>{language === 'ar' ? 'أرسل صورة الإشعار للمهندس رقيب عبر الواتساب أو التيليجرام لاستلام كود التفعيل الخاص بك.' : 'Send transfer screenshot to Engineer Rqeeb via WhatsApp or Telegram to get your code.'}</span>
             </div>
           </div>
         </div>
@@ -153,7 +152,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
           <div className="pb-3 border-b border-slate-700">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
               <Key className="w-5 h-5 text-blue-400" />
-              <span>إدخال بيانات التفعيل والدخول</span>
+              <span>{language === 'ar' ? 'إدخال بيانات التفعيل والدخول' : 'Enter Activation & Credentials'}</span>
             </h3>
           </div>
 
@@ -161,43 +160,37 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
             {/* Field 1: Phone or Email */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-slate-300">
-                رقم الهاتف أو البريد الإلكتروني الخاص بك:
+                {t('identityInputLabel')}
               </label>
               <div className="relative">
                 <input
                   type="text"
                   required
-                  placeholder="أدخل رقم الهاتف أو البريد الإلكتروني"
+                  placeholder={t('identityInputPlaceholder')}
                   value={identity}
                   onChange={(e) => setIdentity(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono"
                   dir="ltr"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 block">
-                سيتم ربط التفعيل برقمك أو بريدك الإلكتروني لحفظ الجلسة.
-              </span>
             </div>
 
             {/* Field 2: Activation Code */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-slate-300">
-                كود التفعيل الخاص بالحساب المشترك:
+                {t('activationInputLabel')}
               </label>
               <div className="relative">
                 <input
                   type="text"
                   required
-                  placeholder="أدخل كود التفعيل المستلم من المالك"
+                  placeholder={t('activationInputPlaceholder')}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono uppercase font-bold"
                   dir="ltr"
                 />
               </div>
-              <span className="text-[11px] text-slate-400 block">
-                أدخل كود التفعيل المستلم حصراً من المهندس رقيب.
-              </span>
             </div>
           </div>
 
@@ -227,7 +220,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
               id="btn-submit-user-activation"
             >
               <ShieldCheck className="w-5 h-5" />
-              <span>تفعيل الحساب والدخول الآن</span>
+              <span>{t('activateBtn')}</span>
             </button>
 
             {/* Support Links */}
@@ -239,7 +232,7 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
                 className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>طلب كود عبر التيليجرام</span>
+                <span>{language === 'ar' ? 'طلب كود عبر التيليجرام' : 'Request Code on Telegram'}</span>
               </a>
 
               <span className="text-slate-600">|</span>
@@ -247,10 +240,10 @@ export const UserActivationScreen: React.FC<UserActivationScreenProps> = ({
               <button
                 type="button"
                 onClick={onOpenOwnerLogin}
-                className="text-slate-400 hover:text-white transition font-medium"
+                className="text-slate-400 hover:text-white transition font-medium cursor-pointer"
                 id="btn-owner-panel-shortcut"
               >
-                دخول المالك
+                {t('ownerPanelLoginLink')}
               </button>
             </div>
           </div>

@@ -12,6 +12,7 @@ import { PWAInstallBanner } from './components/PWAInstallBanner';
 import { UserActivationScreen } from './components/UserActivationScreen';
 import { OwnerPanelModal } from './components/OwnerPanelModal';
 import { PlatformTabs } from './components/PlatformTabs';
+import { PlatformGuideModal } from './components/PlatformGuideModal';
 import { AccountTargetBanner } from './components/AccountTargetBanner';
 import { OwnerContactCard } from './components/OwnerContactCard';
 import { CriticalHackedSolution } from './components/CriticalHackedSolution';
@@ -25,10 +26,13 @@ import { ScamWarning } from './components/ScamWarning';
 import { NotificationCenter } from './components/NotificationCenter';
 import { Footer } from './components/Footer';
 import { ShieldCheck, LogOut } from 'lucide-react';
+import { useLanguage } from './context/LanguageContext';
 
 export default function App() {
+  const { language, t } = useLanguage();
   const [activePlatformId, setActivePlatformId] = useState<PlatformId>('google');
   const [showOwnerModal, setShowOwnerModal] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
 
   // Activation Store
   const {
@@ -56,9 +60,14 @@ export default function App() {
   // STRICT LOCK: Main application features unlocked ONLY when user has valid activation or owner is logged in
   const isContentUnlocked = isActivated || isOwnerLoggedIn;
 
+  const handleSelectPlatform = (id: PlatformId) => {
+    setActivePlatformId(id);
+    setShowGuideModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 font-sans selection:bg-red-100 selection:text-red-900 antialiased">
-      {/* Navigation Header with Logo R */}
+      {/* Navigation Header with Logo R & Language Switcher */}
       <Navbar 
         currentPlatform={currentPlatform}
         onOpenOwnerPanel={() => setShowOwnerModal(true)}
@@ -74,18 +83,18 @@ export default function App() {
 
         {/* Active Subscriber Session Badge (if logged in) */}
         {isActivated && userSession && (
-          <div className="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm shadow-md" dir="rtl">
+          <div className="bg-slate-900 text-white p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm shadow-md">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-white">حسابك مفعّل بنجاح:</span>
+                  <span className="font-bold text-white">{t('sessionActivated')}</span>
                   <span className="font-mono text-emerald-400 font-bold" dir="ltr">{userSession.identity}</span>
                 </div>
                 <div className="text-slate-400 text-xs font-mono">
-                  كود الاشتراك: <span className="text-amber-300 font-bold">{userSession.code}</span> | تاريخ التفعيل: {userSession.activatedAt}
+                  {t('sessionCode')} <span className="text-amber-300 font-bold">{userSession.code}</span> | {t('sessionDate')} {userSession.activatedAt}
                 </div>
               </div>
             </div>
@@ -96,7 +105,7 @@ export default function App() {
                 className="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>تسجيل الخروج من التفعيل</span>
+                <span>{t('logoutActivation')}</span>
               </button>
             </div>
           </div>
@@ -118,10 +127,8 @@ export default function App() {
             {/* Platform Selector Tabs */}
             <PlatformTabs 
               activePlatformId={activePlatformId} 
-              onSelectPlatform={(id) => {
-                setActivePlatformId(id);
-                window.scrollTo({ top: 120, behavior: 'smooth' });
-              }} 
+              onSelectPlatform={handleSelectPlatform} 
+              onOpenGuideModal={() => setShowGuideModal(true)}
             />
 
             {/* Push Notification Center & Security Alerts */}
@@ -144,10 +151,7 @@ export default function App() {
 
             {/* All Platforms Emergency Matrix */}
             <AllPlatformsOverview 
-              onSelectPlatform={(id) => {
-                setActivePlatformId(id);
-                window.scrollTo({ top: 120, behavior: 'smooth' });
-              }} 
+              onSelectPlatform={handleSelectPlatform} 
             />
 
             {/* Post recovery security checklist */}
@@ -161,6 +165,13 @@ export default function App() {
           </>
         )}
       </main>
+
+      {/* Guided Platform Steps Popup Modal */}
+      <PlatformGuideModal
+        isOpen={showGuideModal}
+        onClose={() => setShowGuideModal(false)}
+        platform={currentPlatform}
+      />
 
       {/* Secret Owner Control Panel Modal */}
       <OwnerPanelModal

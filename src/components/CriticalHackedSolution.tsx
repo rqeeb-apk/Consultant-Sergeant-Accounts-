@@ -10,7 +10,7 @@ export const CriticalHackedSolution: React.FC<CriticalHackedSolutionProps> = ({ 
   const [showExplanation, setShowExplanation] = useState(false);
 
   return (
-    <div className="bg-white border-2 border-red-500/80 rounded-2xl p-5 sm:p-7 shadow-md mb-8 relative overflow-hidden" dir="rtl">
+    <div id="hacked-solution-section" className="bg-white border-2 border-red-500/80 rounded-2xl p-5 sm:p-7 shadow-md mb-8 relative overflow-hidden" dir="rtl">
       {/* Accent strip */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
 

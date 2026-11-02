@@ -8,7 +8,7 @@ interface StepByStepGuideProps {
 
 export const StepByStepGuide: React.FC<StepByStepGuideProps> = ({ currentPlatform }) => {
   return (
-    <section className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="step-roadmap-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
           <ShieldCheck className="w-6 h-6" />

@@ -13,7 +13,7 @@ export const AllPlatformsOverview: React.FC<AllPlatformsOverviewProps> = ({
   const platforms = Object.values(PLATFORMS_DATA);
 
   return (
-    <section className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="emergency-matrix-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">

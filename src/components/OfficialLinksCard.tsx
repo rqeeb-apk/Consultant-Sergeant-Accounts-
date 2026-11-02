@@ -10,7 +10,7 @@ export const OfficialLinksCard: React.FC<OfficialLinksCardProps> = ({ currentPla
   const links = currentPlatform.officialLinks;
 
   return (
-    <section className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="official-links-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
       <div className="flex items-center gap-3 mb-5">
         <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
           <LifeBuoy className="w-6 h-6" />
