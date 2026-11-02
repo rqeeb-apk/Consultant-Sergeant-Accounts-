@@ -1,26 +1,29 @@
 import React from 'react';
 import { PlatformConfig } from '../types';
 import { LifeBuoy, ExternalLink } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface OfficialLinksCardProps {
   currentPlatform: PlatformConfig;
 }
 
 export const OfficialLinksCard: React.FC<OfficialLinksCardProps> = ({ currentPlatform }) => {
+  const { language, t } = useLanguage();
   const links = currentPlatform.officialLinks;
+  const platformName = language === 'en' && currentPlatform.nameEn ? currentPlatform.nameEn : currentPlatform.nameAr;
 
   return (
-    <section id="official-links-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="official-links-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8">
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
           <LifeBuoy className="w-6 h-6" />
         </div>
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-            الروابط الرسمية المعتمدة لـ {currentPlatform.nameAr}
+            {language === 'ar' ? `الروابط الرسمية المعتمدة لـ ${currentPlatform.nameAr}` : `Official Authorized Recovery Links for ${platformName}`}
           </h3>
           <p className="text-xs sm:text-sm text-slate-500">
-            جميع هذه الروابط رسمية ومباشرة ومشفرة من الشركة الأم
+            {language === 'ar' ? 'جميع هذه الروابط رسمية ومباشرة ومشفرة من الشركة الأم' : 'All links are direct, encrypted, official support endpoints from original platforms'}
           </p>
         </div>
       </div>
@@ -32,7 +35,7 @@ export const OfficialLinksCard: React.FC<OfficialLinksCardProps> = ({ currentPla
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`p-4 rounded-xl border transition flex flex-col justify-between gap-3 group ${
+            className={`p-4 rounded-xl border transition flex flex-col justify-between gap-3 group cursor-pointer ${
               link.isPrimary
                 ? 'bg-blue-50/70 border-blue-300 hover:border-blue-400 hover:bg-blue-50'
                 : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/70'
@@ -50,7 +53,7 @@ export const OfficialLinksCard: React.FC<OfficialLinksCardProps> = ({ currentPla
                 >
                   {link.badge}
                 </span>
-                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition" />
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition shrink-0" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition">
                 {link.title}

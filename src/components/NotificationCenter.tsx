@@ -5,22 +5,21 @@ import {
   BellRing, 
   ShieldAlert, 
   CheckCircle2, 
-  Send, 
   AlertTriangle, 
   ExternalLink, 
   Sparkles, 
   RefreshCw, 
   Check, 
   Settings2, 
-  SlidersHorizontal,
   ChevronDown,
   ChevronUp,
   Info
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const NotificationCenter: React.FC = () => {
+  const { language, t } = useLanguage();
   const {
-    isSupported,
     permission,
     settings,
     alerts,
@@ -43,9 +42,9 @@ export const NotificationCenter: React.FC = () => {
     try {
       const ok = await sendTestNotification(type);
       if (ok) {
-        setTestSentMessage('تم إرسال التنبيه الفوري بنجاح! تفقد أعلى شاشة هاتفك أو جهازك.');
+        setTestSentMessage(language === 'ar' ? 'تم إرسال التنبيه الفوري بنجاح! تفقد أعلى شاشة هاتفك أو جهازك.' : 'Push notification delivered successfully!');
       } else {
-        setTestSentMessage('تم تسجيل التنبيه في القائمة الداخلية. يرجى التأكد من الموافقة على إذن الإشعارات من المتصفح.');
+        setTestSentMessage(language === 'ar' ? 'تم تسجيل التنبيه في القائمة الداخلية. يرجى التأكد من الموافقة على إذن الإشعارات.' : 'Notification added to in-app alerts list.');
       }
     } finally {
       setIsSendingTest(false);
@@ -61,8 +60,7 @@ export const NotificationCenter: React.FC = () => {
   return (
     <section 
       id="notification-center-section" 
-      className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-7 shadow-sm mb-8 scroll-mt-20" 
-      dir="rtl"
+      className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-7 shadow-sm mb-8 scroll-mt-20"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
@@ -77,16 +75,16 @@ export const NotificationCenter: React.FC = () => {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
-                مركز التنبيهات والإشعارات الأمنية الفورية
+                {t('notificationsTitle')}
               </h3>
               {unreadCount > 0 && (
                 <span className="bg-red-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
-                  {unreadCount} تنبيه جديد
+                  {unreadCount} {language === 'ar' ? 'جديد' : 'New'}
                 </span>
               )}
             </div>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              خدمة إرسال تنبيهات (Push Notifications) لإبلاغك بأي تحديثات جديدة في طرق الاسترجاع أو تحذيرات أمنية طارئة
+              {language === 'ar' ? 'خدمة إرسال تنبيهات (Push Notifications) لإبلاغك بأي تحديثات جديدة في طرق الاسترجاع أو تحذيرات أمنية طارئة' : 'Real-time push notifications for urgent security advisories & method updates'}
             </p>
           </div>
         </div>
@@ -96,12 +94,12 @@ export const NotificationCenter: React.FC = () => {
           {permission === 'granted' ? (
             <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-xl">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>التنبيهات مفعلة على هذا الجهاز</span>
+              <span>{language === 'ar' ? 'التنبيهات مفعلة' : 'Notifications Active'}</span>
             </div>
           ) : permission === 'denied' ? (
             <div className="flex items-center gap-1.5 bg-red-50 text-red-800 border border-red-200 text-xs font-bold px-3 py-1.5 rounded-xl">
               <AlertTriangle className="w-4 h-4 text-red-600" />
-              <span>محظورة في إعدادات المتصفح</span>
+              <span>{language === 'ar' ? 'محظورة في المتصفح' : 'Blocked in Browser'}</span>
             </div>
           ) : (
             <button
@@ -110,7 +108,7 @@ export const NotificationCenter: React.FC = () => {
               id="btn-enable-push-notifications"
             >
               <BellRing className="w-4 h-4" />
-              <span>تفعيل التنبيهات المباشرة</span>
+              <span>{language === 'ar' ? 'تفعيل التنبيهات المباشرة' : 'Enable Push Notifications'}</span>
             </button>
           )}
         </div>
@@ -122,17 +120,17 @@ export const NotificationCenter: React.FC = () => {
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-300/30 px-2.5 py-0.5 rounded-full">
-                نظام البث الأمني المباشر
+                {language === 'ar' ? 'نظام البث الأمني المباشر' : 'Live Security Feed'}
               </span>
               <span className="text-xs text-slate-300">
-                إشعار فوري عند صدور أي ثغرة أو تحديث
+                {language === 'ar' ? 'إشعار فوري عند صدور أي ثغرة أو تحديث' : 'Real-time broadcast for security updates'}
               </span>
             </div>
             <h4 className="text-base font-bold text-white">
-              جرب إرسال تنبيه تجريبي فوري إلى هاتفك أو جهازك الآن
+              {language === 'ar' ? 'جرب إرسال تنبيه تجريبي فوري إلى هاتفك أو جهازك الآن' : 'Send a test push notification to your device now'}
             </h4>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              اضغط على أحد الأزرار أدناه للتحقق من وصول التنبيهات إلى شريط إشعارات جهازك:
+              {language === 'ar' ? 'اضغط على أحد الأزرار أدناه للتحقق من وصول التنبيهات إلى شريط إشعارات جهازك:' : 'Click any button below to trigger an immediate alert test:'}
             </p>
           </div>
 
@@ -144,7 +142,7 @@ export const NotificationCenter: React.FC = () => {
               id="btn-test-critical-alert"
             >
               <ShieldAlert className="w-4 h-4" />
-              <span>تنبيه أمني عاجل</span>
+              <span>{language === 'ar' ? 'تنبيه أمني عاجل' : 'Urgent Alert'}</span>
             </button>
 
             <button
@@ -154,7 +152,7 @@ export const NotificationCenter: React.FC = () => {
               id="btn-test-recovery-update"
             >
               <RefreshCw className="w-4 h-4" />
-              <span>تحديث طريقة استرجاع</span>
+              <span>{language === 'ar' ? 'تحديث طريقة استرجاع' : 'Method Update'}</span>
             </button>
 
             <button
@@ -164,7 +162,7 @@ export const NotificationCenter: React.FC = () => {
               id="btn-test-advisor-tip"
             >
               <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>نصيحة المهندس رقيب</span>
+              <span>{language === 'ar' ? 'نصيحة المهندس رقيب' : 'Pro Security Tip'}</span>
             </button>
           </div>
         </div>
@@ -176,7 +174,7 @@ export const NotificationCenter: React.FC = () => {
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{testSentMessage}</span>
             </div>
-            <span className="text-[10px] text-emerald-400 font-mono">الآن</span>
+            <span className="text-[10px] text-emerald-400 font-mono">{language === 'ar' ? 'الآن' : 'Now'}</span>
           </div>
         )}
 
@@ -186,10 +184,10 @@ export const NotificationCenter: React.FC = () => {
             <Info className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <span className="font-bold block text-white">
-                تم رفض إذن الإشعارات مسبقاً في متصفحك
+                {language === 'ar' ? 'تم رفض إذن الإشعارات مسبقاً في متصفحك' : 'Notifications permission previously blocked'}
               </span>
               <p className="text-red-200/90 leading-relaxed">
-                لإعادة تفعيلها: اضغط على أيقونة القفل أو الإعدادات 🔒 بجانب رابط الموقع في شريط المتصفح، ثم فعّل خيار <strong>"الإشعارات (Notifications)"</strong> وأعد تحميل الصفحة.
+                {language === 'ar' ? 'لإعادة تفعيلها: اضغط على أيقونة القفل أو الإعدادات 🔒 بجانب رابط الموقع في شريط المتصفح، ثم فعّل خيار "الإشعارات (Notifications)" وأعد تحميل الصفحة.' : 'To re-enable: click the padlock 🔒 in browser address bar, grant "Notifications", and refresh page.'}
               </p>
             </div>
           </div>
@@ -204,7 +202,7 @@ export const NotificationCenter: React.FC = () => {
           id="btn-toggle-notification-categories"
         >
           <Settings2 className="w-3.5 h-3.5 text-blue-600" />
-          <span>تخصيص فئات التنبيهات التي ترغب باستلامها</span>
+          <span>{language === 'ar' ? 'تخصيص فئات التنبيهات التي ترغب باستلامها' : 'Customize Notification Categories'}</span>
           {showSettingsDrawer ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
         </button>
 
@@ -219,8 +217,8 @@ export const NotificationCenter: React.FC = () => {
                 className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
               />
               <div>
-                <span className="font-bold text-slate-900 block">🚨 تنبيهات أمنية عاجلة</span>
-                <span className="text-[11px] text-slate-500">حيل اختراق جديدة وثغرات الحسابات</span>
+                <span className="font-bold text-slate-900 block">{language === 'ar' ? '🚨 تنبيهات أمنية عاجلة' : '🚨 Urgent Security Alerts'}</span>
+                <span className="text-[11px] text-slate-500">{language === 'ar' ? 'حيل اختراق جديدة وثغرات الحسابات' : 'Zero-day security advisories'}</span>
               </div>
             </label>
 
@@ -233,8 +231,8 @@ export const NotificationCenter: React.FC = () => {
                 className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
               />
               <div>
-                <span className="font-bold text-slate-900 block">🔄 تحديثات طرق الاسترجاع</span>
-                <span className="text-[11px] text-slate-500">روابط وبوابات استعادة جديدة</span>
+                <span className="font-bold text-slate-900 block">{language === 'ar' ? '🔄 تحديثات طرق الاسترجاع' : '🔄 Method & Portal Updates'}</span>
+                <span className="text-[11px] text-slate-500">{language === 'ar' ? 'روابط وبوابات استعادة جديدة' : 'New recovery shortcuts & portals'}</span>
               </div>
             </label>
 
@@ -247,8 +245,8 @@ export const NotificationCenter: React.FC = () => {
                 className="w-4 h-4 text-amber-600 rounded focus:ring-amber-500"
               />
               <div>
-                <span className="font-bold text-slate-900 block">💡 توجيهات المهندس رقيب</span>
-                <span className="text-[11px] text-slate-500">نصائح حماية وتحصين الحسابات</span>
+                <span className="font-bold text-slate-900 block">{language === 'ar' ? '💡 توجيهات المهندس رقيب' : '💡 Expert Security Guidance'}</span>
+                <span className="text-[11px] text-slate-500">{language === 'ar' ? 'نصائح حماية وتحصين الحسابات' : 'Proactive account hardening tips'}</span>
               </div>
             </label>
           </div>
@@ -259,7 +257,7 @@ export const NotificationCenter: React.FC = () => {
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="font-bold text-slate-700 ml-1">تصفية التنبيهات:</span>
+            <span className="font-bold text-slate-700 ltr:mr-1 rtl:ml-1">{language === 'ar' ? 'تصفية التنبيهات:' : 'Filter Alerts:'}</span>
             <button
               onClick={() => setFilterType('all')}
               className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer ${
@@ -268,7 +266,7 @@ export const NotificationCenter: React.FC = () => {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              الكل ({alerts.length})
+              {language === 'ar' ? `الكل (${alerts.length})` : `All (${alerts.length})`}
             </button>
             <button
               onClick={() => setFilterType('critical')}
@@ -278,7 +276,7 @@ export const NotificationCenter: React.FC = () => {
                   : 'bg-red-50 text-red-700 hover:bg-red-100'
               }`}
             >
-              عاجل
+              {language === 'ar' ? 'عاجل' : 'Urgent'}
             </button>
             <button
               onClick={() => setFilterType('update')}
@@ -288,7 +286,7 @@ export const NotificationCenter: React.FC = () => {
                   : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
               }`}
             >
-              تحديثات الاسترجاع
+              {language === 'ar' ? 'تحديثات' : 'Updates'}
             </button>
             <button
               onClick={() => setFilterType('tip')}
@@ -298,7 +296,7 @@ export const NotificationCenter: React.FC = () => {
                   : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
               }`}
             >
-              توجيهات
+              {language === 'ar' ? 'توجيهات' : 'Tips'}
             </button>
           </div>
 
@@ -308,7 +306,7 @@ export const NotificationCenter: React.FC = () => {
               className="text-xs text-blue-600 hover:text-blue-800 font-bold self-start sm:self-auto flex items-center gap-1 cursor-pointer"
             >
               <Check className="w-3.5 h-3.5" />
-              <span>تحديد الكل كمقروء</span>
+              <span>{language === 'ar' ? 'تحديد الكل كمقروء' : 'Mark all as read'}</span>
             </button>
           )}
         </div>
@@ -317,7 +315,7 @@ export const NotificationCenter: React.FC = () => {
         <div className="space-y-3">
           {filteredAlerts.length === 0 ? (
             <div className="text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-              لا توجد تنبيهات في هذا القسم حالياً.
+              {language === 'ar' ? 'لا توجد تنبيهات في هذا القسم حالياً.' : 'No alerts in this category.'}
             </div>
           ) : (
             filteredAlerts.map((alert) => (
@@ -341,10 +339,10 @@ export const NotificationCenter: React.FC = () => {
                           : 'bg-amber-100 text-amber-800 border border-amber-200'
                       }`}
                     >
-                      {alert.type === 'critical' ? 'تحذير أمني عاجل' : alert.type === 'update' ? 'تحديث استرجاع' : 'توجيه تقني'}
+                      {alert.type === 'critical' ? (language === 'ar' ? 'تحذير أمني عاجل' : 'Urgent Advisory') : alert.type === 'update' ? (language === 'ar' ? 'تحديث استرجاع' : 'Method Update') : (language === 'ar' ? 'توجيه تقني' : 'Pro Tip')}
                     </span>
                     {!alert.read && (
-                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                      <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0"></span>
                     )}
                     <span className="text-[11px] text-slate-400 font-medium">
                       {alert.date}
@@ -366,9 +364,9 @@ export const NotificationCenter: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="self-stretch sm:self-center bg-white hover:bg-slate-100 text-blue-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shrink-0 shadow-2xs"
+                    className="self-stretch sm:self-center bg-white hover:bg-slate-100 text-blue-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shrink-0 shadow-2xs cursor-pointer"
                   >
-                    <span>{alert.linkText || 'عرض التفاصيل'}</span>
+                    <span>{alert.linkText || (language === 'ar' ? 'عرض التفاصيل' : 'View Details')}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 )}

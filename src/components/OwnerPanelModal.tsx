@@ -7,7 +7,6 @@ import {
   Plus, 
   Trash2, 
   CheckCircle2, 
-  XCircle, 
   RefreshCw, 
   UserCheck, 
   Settings, 
@@ -17,13 +16,7 @@ import {
   Save, 
   Copy, 
   Check, 
-  AlertTriangle,
-  Award,
-  Wallet,
-  Phone,
-  Mail,
-  Send,
-  SlidersHorizontal,
+  Wallet, 
   LogOut
 } from 'lucide-react';
 import { 
@@ -34,6 +27,7 @@ import {
   OwnerConfig, 
   UserSession 
 } from '../hooks/useActivationStore';
+import { useLanguage } from '../context/LanguageContext';
 
 interface OwnerPanelModalProps {
   isOpen: boolean;
@@ -70,6 +64,8 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
   onUpdateOwnerCredentials,
   onUpdateOwnerConfig,
 }) => {
+  const { language, t } = useLanguage();
+
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPin, setLoginPin] = useState('');
@@ -163,7 +159,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
   const unusedCount = codes.filter((c) => !c.isUsed).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto" dir="rtl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-5xl w-full p-5 sm:p-7 shadow-2xl relative space-y-6 my-8 max-h-[90vh] flex flex-col overflow-hidden">
         
         {/* Header Bar */}
@@ -175,14 +171,14 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg sm:text-xl font-extrabold text-white">
-                  لوحة المالك والتحكم الكامل (المهندس رقيب)
+                  {language === 'ar' ? 'لوحة المالك والتحكم الكامل (المهندس رقيب)' : 'Owner Control Panel (Eng. Rqeeb)'}
                 </h3>
                 <span className="text-[10px] bg-red-600/30 text-red-300 border border-red-500/40 px-2.5 py-0.5 rounded-full font-bold">
-                  سرية
+                  {language === 'ar' ? 'سرية' : 'Confidential'}
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                إدارة أكواد التفعيل الـ 350+، تفعيل الاشتراك المشترك، وتعديل إعدادات الموقع والمحافظ
+                {language === 'ar' ? 'إدارة أكواد التفعيل الـ 350+، تفعيل الاشتراك المشترك، وتعديل إعدادات الموقع والمحافظ' : 'Manage 350+ activation codes, user sessions, wallet numbers & settings'}
               </p>
             </div>
           </div>
@@ -191,17 +187,17 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
             {isOwnerLoggedIn && (
               <button
                 onClick={onLogoutOwner}
-                className="bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 transition cursor-pointer"
-                title="تسجيل الخروج من لوحة المالك"
+                className="bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 transition cursor-pointer shrink-0"
+                title={language === 'ar' ? 'تسجيل الخروج من لوحة المالك' : 'Logout Owner Panel'}
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>خروج</span>
+                <span>{language === 'ar' ? 'خروج' : 'Logout'}</span>
               </button>
             )}
 
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-1.5 rounded-full hover:bg-slate-800 transition cursor-pointer"
+              className="text-slate-400 hover:text-white p-1.5 rounded-full hover:bg-slate-800 transition cursor-pointer shrink-0"
               id="btn-close-owner-panel-modal"
             >
               <X className="w-6 h-6" />
@@ -217,21 +213,21 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <Lock className="w-8 h-8" />
               </div>
               <h4 className="text-xl font-bold text-white">
-                تسجيل دخول المالك والمهندس الاستشاري
+                {language === 'ar' ? 'تسجيل دخول المالك والمهندس الاستشاري' : 'Owner / Admin Portal Access'}
               </h4>
               <p className="text-xs text-slate-400">
-                أدخل البريد الإلكتروني، رمز PIN، وكلمة السر المعتمدة للوصول للوحة التحكم
+                {language === 'ar' ? 'أدخل البريد الإلكتروني، رمز PIN، وكلمة السر المعتمدة للوصول للوحة التحكم' : 'Enter email, PIN code, and password to authenticate'}
               </p>
             </div>
 
             <form onSubmit={handleLoginSubmit} className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/80 space-y-4">
               {/* Field 1: Owner Email */}
               <div className="space-y-1">
-                <label className="block text-xs font-bold text-slate-300">البريد الإلكتروني للمالك:</label>
+                <label className="block text-xs font-bold text-slate-300">{language === 'ar' ? 'البريد الإلكتروني للمالك:' : 'Owner Email:'}</label>
                 <input
                   type="email"
                   required
-                  placeholder="أدخل البريد الإلكتروني الخاص بالمالك"
+                  placeholder="rqeebpro@gmail.com"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono"
@@ -241,12 +237,12 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
               {/* Field 2: Owner PIN */}
               <div className="space-y-1">
-                <label className="block text-xs font-bold text-slate-300">رمز PIN السري:</label>
+                <label className="block text-xs font-bold text-slate-300">{language === 'ar' ? 'رمز PIN السري:' : 'Secret PIN:'}</label>
                 <input
                   type="text"
                   required
                   maxLength={10}
-                  placeholder="أدخل رمز PIN السري"
+                  placeholder="PIN"
                   value={loginPin}
                   onChange={(e) => setLoginPin(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono tracking-widest font-bold"
@@ -256,7 +252,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
               {/* Field 3: Owner Password */}
               <div className="space-y-1">
-                <label className="block text-xs font-bold text-slate-300">كلمة السر:</label>
+                <label className="block text-xs font-bold text-slate-300">{language === 'ar' ? 'كلمة السر:' : 'Password:'}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -270,7 +266,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-3 top-2.5 text-slate-400 hover:text-white"
+                    className="absolute ltr:right-3 rtl:left-3 top-2.5 text-slate-400 hover:text-white"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -295,7 +291,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 id="btn-submit-owner-login"
               >
                 <Key className="w-4 h-4" />
-                <span>دخول لوحة التحكم والمالك</span>
+                <span>{language === 'ar' ? 'دخول لوحة التحكم والمالك' : 'Login to Owner Panel'}</span>
               </button>
             </form>
           </div>
@@ -314,7 +310,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 }`}
               >
                 <Key className="w-4 h-4" />
-                <span>إدارة الأكواد الـ 350+ ({codes.length})</span>
+                <span>{language === 'ar' ? `إدارة الأكواد الـ 350+ (${codes.length})` : `Manage Codes (${codes.length})`}</span>
               </button>
 
               <button
@@ -326,7 +322,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 }`}
               >
                 <UserCheck className="w-4 h-4" />
-                <span>المشتركون والمفعّلون ({subscribers.length})</span>
+                <span>{language === 'ar' ? `المشتركون والمفعّلون (${subscribers.length})` : `Subscribers (${subscribers.length})`}</span>
               </button>
 
               <button
@@ -338,7 +334,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 }`}
               >
                 <Settings className="w-4 h-4" />
-                <span>تعديل بيانات المحفظة والموقع</span>
+                <span>{language === 'ar' ? 'تعديل بيانات المحفظة والموقع' : 'Site & Wallet Settings'}</span>
               </button>
 
               <button
@@ -350,7 +346,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 }`}
               >
                 <Lock className="w-4 h-4" />
-                <span>تعديل PIN المالك والدخول</span>
+                <span>{language === 'ar' ? 'تعديل PIN المالك والدخول' : 'Security & PIN Settings'}</span>
               </button>
             </div>
 
@@ -360,16 +356,16 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 {/* Metrics */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0">
                   <div className="bg-slate-800 p-3 rounded-2xl border border-slate-700">
-                    <span className="text-slate-400 block">إجمالي الأكواد:</span>
-                    <span className="text-lg font-bold text-white font-mono">{codes.length} كود</span>
+                    <span className="text-slate-400 block">{language === 'ar' ? 'إجمالي الأكواد:' : 'Total Codes:'}</span>
+                    <span className="text-lg font-bold text-white font-mono">{codes.length}</span>
                   </div>
                   <div className="bg-slate-800 p-3 rounded-2xl border border-slate-700">
-                    <span className="text-slate-400 block">أكواد مفعّلة/مستخدمة:</span>
-                    <span className="text-lg font-bold text-amber-400 font-mono">{usedCount} كود</span>
+                    <span className="text-slate-400 block">{language === 'ar' ? 'أكواد مفعّلة/مستخدمة:' : 'Used Codes:'}</span>
+                    <span className="text-lg font-bold text-amber-400 font-mono">{usedCount}</span>
                   </div>
                   <div className="bg-slate-800 p-3 rounded-2xl border border-slate-700">
-                    <span className="text-slate-400 block">أكواد غير مستعملة:</span>
-                    <span className="text-lg font-bold text-emerald-400 font-mono">{unusedCount} كود</span>
+                    <span className="text-slate-400 block">{language === 'ar' ? 'أكواد غير مستعملة:' : 'Unused Codes:'}</span>
+                    <span className="text-lg font-bold text-emerald-400 font-mono">{unusedCount}</span>
                   </div>
                   <div className="bg-slate-800 p-3 rounded-2xl border border-slate-700 flex items-center justify-between">
                     <button
@@ -377,7 +373,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                       className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-3 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>إضافة أكواد جديدة</span>
+                      <span>{language === 'ar' ? 'إضافة أكواد جديدة' : 'Add New Codes'}</span>
                     </button>
                   </div>
                 </div>
@@ -387,12 +383,12 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   <div className="relative w-full sm:w-72">
                     <input
                       type="text"
-                      placeholder="بحث عن كود أو مستخدم..."
+                      placeholder={language === 'ar' ? 'بحث عن كود أو مستخدم...' : 'Search code or user...'}
                       value={codeSearch}
                       onChange={(e) => setCodeSearch(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl pr-9 pl-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl ltr:pl-9 ltr:pr-3 rtl:pr-9 rtl:pl-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
                     />
-                    <Search className="w-4 h-4 text-slate-400 absolute right-3 top-2" />
+                    <Search className="w-4 h-4 text-slate-400 absolute ltr:left-3 rtl:right-3 top-2" />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto text-xs">
@@ -402,13 +398,13 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                       onChange={(e) => setCategoryFilter(e.target.value)}
                       className="bg-slate-900 border border-slate-600 rounded-xl px-3 py-1.5 text-white font-bold"
                     >
-                      <option value="all">كل الفئات</option>
-                      <option value="gmail">جوجل (gmail)</option>
-                      <option value="face">فيسبوك (face)</option>
-                      <option value="whats">واتساب (whats)</option>
-                      <option value="insta">إنستغرام (insta)</option>
-                      <option value="tik">تيك توك (tik)</option>
-                      <option value="snap">سناب شات (snap)</option>
+                      <option value="all">{language === 'ar' ? 'كل الفئات' : 'All Categories'}</option>
+                      <option value="gmail">Google (gmail)</option>
+                      <option value="face">Facebook (face)</option>
+                      <option value="whats">WhatsApp (whats)</option>
+                      <option value="insta">Instagram (insta)</option>
+                      <option value="tik">TikTok (tik)</option>
+                      <option value="snap">Snapchat (snap)</option>
                     </select>
 
                     {/* Status Filter */}
@@ -417,18 +413,18 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                       onChange={(e) => setStatusFilter(e.target.value as any)}
                       className="bg-slate-900 border border-slate-600 rounded-xl px-3 py-1.5 text-white font-bold"
                     >
-                      <option value="all">كل الحالات</option>
-                      <option value="unused">غير مستعمل فقط</option>
-                      <option value="used">مستخدم ومفعل فقط</option>
+                      <option value="all">{language === 'ar' ? 'كل الحالات' : 'All Statuses'}</option>
+                      <option value="unused">{language === 'ar' ? 'غير مستعمل فقط' : 'Unused Only'}</option>
+                      <option value="used">{language === 'ar' ? 'مستخدم ومفعل فقط' : 'Used Only'}</option>
                     </select>
 
                     <button
                       onClick={onResetAllCodes}
                       className="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-2.5 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer"
-                      title="إعادة تعيين الأكواد لغير مستعمل"
+                      title={language === 'ar' ? 'إعادة تعيين الأكواد لغير مستعمل' : 'Reset All Codes to Unused'}
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
-                      <span>إعادة ضبط الحالات</span>
+                      <span>{language === 'ar' ? 'إعادة ضبط الحالات' : 'Reset Statuses'}</span>
                     </button>
                   </div>
                 </div>
@@ -437,7 +433,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <div className="flex-1 overflow-y-auto border border-slate-800 rounded-2xl bg-slate-950/60 p-2 space-y-1.5">
                   {filteredCodes.length === 0 ? (
                     <div className="text-center py-12 text-slate-500 text-xs">
-                      لا توجد أكواد تطابق خيارات البحث الحالية.
+                      {language === 'ar' ? 'لا توجد أكواد تطابق خيارات البحث الحالية.' : 'No codes match search filter.'}
                     </div>
                   ) : (
                     filteredCodes.map((item) => (
@@ -472,11 +468,11 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                           {item.isUsed ? (
                             <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                              <span>مفعل لـ: {item.usedBy}</span>
+                              <span>{language === 'ar' ? `مفعل لـ: ${item.usedBy}` : `Used by: ${item.usedBy}`}</span>
                             </span>
                           ) : (
                             <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">
-                              جاهز للاستعمال
+                              {language === 'ar' ? 'جاهز للاستعمال' : 'Ready / Unused'}
                             </span>
                           )}
                         </div>
@@ -484,10 +480,10 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                         <div className="flex items-center gap-2 self-end sm:self-auto">
                           <button
                             onClick={() => copyToClipboard(item.code)}
-                            className="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700 flex items-center gap-1 transition"
+                            className="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700 flex items-center gap-1 transition cursor-pointer"
                           >
                             {copiedCode === item.code ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                            <span>نسخ</span>
+                            <span>{copiedCode === item.code ? (language === 'ar' ? 'نسخ' : 'Copied') : (language === 'ar' ? 'نسخ' : 'Copy')}</span>
                           </button>
 
                           <button
@@ -498,13 +494,13 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                                 : 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600/40'
                             }`}
                           >
-                            {item.isUsed ? 'إلغاء التفعيل' : 'تفعيل يدوياً'}
+                            {item.isUsed ? (language === 'ar' ? 'إلغاء التفعيل' : 'Deactivate') : (language === 'ar' ? 'تفعيل يدوياً' : 'Activate Manually')}
                           </button>
 
                           <button
                             onClick={() => onDeleteCode(item.code)}
-                            className="text-slate-500 hover:text-red-400 p-1 transition"
-                            title="حذف الكود"
+                            className="text-slate-500 hover:text-red-400 p-1 transition cursor-pointer"
+                            title={language === 'ar' ? 'حذف الكود' : 'Delete Code'}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -522,17 +518,17 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 space-y-1 shrink-0">
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
                     <UserCheck className="w-4 h-4 text-emerald-400" />
-                    <span>سجل المستخدمين الذين قاموا بتفعيل الاشتراك المشترك</span>
+                    <span>{language === 'ar' ? 'سجل المستخدمين الذين قاموا بتفعيل الاشتراك المشترك' : 'Active Subscriber Log'}</span>
                   </h4>
                   <p className="text-xs text-slate-400">
-                    يعرض كل هاتف أو بريد الكود الذي استخدمه وتاريخ التفعيل.
+                    {language === 'ar' ? 'يعرض كل هاتف أو بريد الكود الذي استخدمه وتاريخ التفعيل.' : 'Displays identity, activated master code, and timestamp.'}
                   </p>
                 </div>
 
                 <div className="flex-1 overflow-y-auto border border-slate-800 rounded-2xl bg-slate-950/60 p-3 space-y-2">
                   {subscribers.length === 0 ? (
                     <div className="text-center py-12 text-slate-500 text-xs">
-                      لا يوجد مستخدمون مفعّلون حتى الآن.
+                      {language === 'ar' ? 'لا يوجد مستخدمون مفعّلون حتى الآن.' : 'No active subscribers logged yet.'}
                     </div>
                   ) : (
                     subscribers.map((sub, idx) => (
@@ -545,14 +541,14 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                             {sub.identity}
                           </div>
                           <div className="text-slate-400 flex items-center gap-2 font-mono">
-                            <span>الكود الماستر: <strong className="text-amber-300">{sub.code}</strong></span>
+                            <span>{language === 'ar' ? 'كود الاشتراك:' : 'Code:'} <strong className="text-amber-300">{sub.code}</strong></span>
                             <span>•</span>
-                            <span>التاريخ: {sub.activatedAt}</span>
+                            <span>{language === 'ar' ? 'التاريخ:' : 'Date:'} {sub.activatedAt}</span>
                           </div>
                         </div>
 
                         <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-bold">
-                          اشتراك نشط
+                          {language === 'ar' ? 'اشتراك نشط' : 'Active Subscription'}
                         </span>
                       </div>
                     ))
@@ -567,17 +563,17 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 space-y-1">
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
                     <Wallet className="w-4 h-4 text-amber-400" />
-                    <span>إعدادات محفظة جيب ورسوم الاشتراك وبيانات التواصل</span>
+                    <span>{language === 'ar' ? 'إعدادات محفظة جيب ورسوم الاشتراك وبيانات التواصل' : 'Wallet & Subscription Pricing Configuration'}</span>
                   </h4>
                   <p className="text-xs text-slate-400">
-                    عدّل رقم المحفظة، قيمة الاشتراك، ورابط الدعم الفني وستتغير فوراً في واجهة المستخدم.
+                    {language === 'ar' ? 'عدّل رقم المحفظة، قيمة الاشتراك، ورابط الدعم الفني وستتغير فوراً في واجهة المستخدم.' : 'Update wallet phone number, subscription fee, and contact links.'}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   {/* Wallet Phone Number */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">رقم محفظة جيب والمحافظ (785502919):</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'رقم محفظة جيب والمحافظ (785502919):' : 'Wallet Phone Number:'}</label>
                     <input
                       type="text"
                       value={editConfig.walletPhone}
@@ -589,7 +585,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* Wallet Title / Name */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">اسم المحفظة المعروض للعميل:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'اسم المحفظة المعروض للعميل:' : 'Wallet Display Name:'}</label>
                     <input
                       type="text"
                       value={editConfig.walletName}
@@ -600,7 +596,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* Subscription Price */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">قيمة الاشتراك (مثال: 1500 ريال يمني):</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'قيمة الاشتراك (مثال: 1500 ريال يمني):' : 'Subscription Price:'}</label>
                     <input
                       type="text"
                       value={editConfig.subscriptionPrice}
@@ -611,7 +607,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* Telegram Bot */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">رابط بوت التيليجرام الرسمي:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'رابط بوت التيليجرام الرسمي:' : 'Official Telegram Bot URL:'}</label>
                     <input
                       type="text"
                       value={editConfig.telegramBot}
@@ -623,7 +619,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* Announcement Text */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700 md:col-span-2">
-                    <label className="block font-bold text-slate-200">نص الإعلان الشريطي العلوي للمستخدمين:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'نص الإعلان الشريطي العلوي للمستخدمين:' : 'Top Banner Announcement Text:'}</label>
                     <textarea
                       rows={2}
                       value={editConfig.announcementText}
@@ -636,7 +632,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 {configSaved && (
                   <div className="p-3 bg-emerald-950 border border-emerald-500 text-emerald-300 text-xs font-bold rounded-xl flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>تم حفظ إعدادات المحفظة والموقع بنجاح!</span>
+                    <span>{language === 'ar' ? 'تم حفظ إعدادات المحفظة والموقع بنجاح!' : 'Wallet and site settings saved successfully!'}</span>
                   </div>
                 )}
 
@@ -645,7 +641,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2.5 px-6 rounded-xl flex items-center gap-2 transition cursor-pointer shadow-md"
                 >
                   <Save className="w-4 h-4" />
-                  <span>حفظ التعديلات الحالية</span>
+                  <span>{language === 'ar' ? 'حفظ التعديلات الحالية' : 'Save Changes'}</span>
                 </button>
               </form>
             )}
@@ -656,17 +652,17 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 space-y-1">
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
                     <Lock className="w-4 h-4 text-red-400" />
-                    <span>تعديل بريد المالك، رمز PIN السري وكلمة السر</span>
+                    <span>{language === 'ar' ? 'تعديل بريد المالك، رمز PIN السري وكلمة السر' : 'Modify Owner Credentials & PIN'}</span>
                   </h4>
                   <p className="text-xs text-slate-400">
-                    قم بتحديث بيانات دخول لوحة المالك لحماية لوحة التحكم.
+                    {language === 'ar' ? 'قم بتحديث بيانات دخول لوحة المالك لحماية لوحة التحكم.' : 'Update owner email, PIN, and password.'}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   {/* Email */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">البريد الإلكتروني للمالك:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'البريد الإلكتروني للمالك:' : 'Owner Email:'}</label>
                     <input
                       type="email"
                       required
@@ -679,7 +675,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* PIN */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">رمز PIN السري الخاصة بالمالك:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'رمز PIN السري الخاص بالمالك:' : 'Secret PIN:'}</label>
                     <input
                       type="text"
                       required
@@ -692,7 +688,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
                   {/* Password */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">كلمة السر الجديدة:</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'كلمة السر الجديدة:' : 'New Password:'}</label>
                     <input
                       type="text"
                       required
@@ -707,7 +703,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 {credsSaved && (
                   <div className="p-3 bg-emerald-950 border border-emerald-500 text-emerald-300 text-xs font-bold rounded-xl flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>تم تحديث بيانات دخول المالك بنجاح!</span>
+                    <span>{language === 'ar' ? 'تم تحديث بيانات دخول المالك بنجاح!' : 'Owner credentials updated successfully!'}</span>
                   </div>
                 )}
 
@@ -716,7 +712,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2.5 px-6 rounded-xl flex items-center gap-2 transition cursor-pointer shadow-md"
                 >
                   <Save className="w-4 h-4" />
-                  <span>تحديث بيانات الدخول والـ PIN</span>
+                  <span>{language === 'ar' ? 'تحديث بيانات الدخول والـ PIN' : 'Update Credentials & PIN'}</span>
                 </button>
               </form>
             )}
@@ -726,12 +722,12 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
         {/* Modal for Add Bulk Codes */}
         {showAddBulkModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" dir="rtl">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
             <form onSubmit={handleAddBulkCodesSubmit} className="bg-slate-900 border border-slate-700 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                 <h4 className="text-base font-bold text-white flex items-center gap-2">
                   <Plus className="w-5 h-5 text-emerald-400" />
-                  <span>إضافة أكواد تفعيل جديدة للمنصة</span>
+                  <span>{language === 'ar' ? 'إضافة أكواد تفعيل جديدة للمنصة' : 'Add New Activation Codes'}</span>
                 </h4>
                 <button
                   type="button"
@@ -744,7 +740,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
 
               <div className="space-y-1">
                 <label className="block text-xs font-bold text-slate-300">
-                  اكتب الأكواد الجديدة (كود في كل سطر أو مفصولة بفاصلة):
+                  {language === 'ar' ? 'اكتب الأكواد الجديدة (كود في كل سطر أو مفصولة بفاصلة):' : 'Enter new codes (one per line or comma-separated):'}
                 </label>
                 <textarea
                   rows={6}
@@ -762,14 +758,14 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   type="submit"
                   className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2.5 rounded-xl transition cursor-pointer"
                 >
-                  إضافة الأكواد الآن
+                  {language === 'ar' ? 'إضافة الأكواد الآن' : 'Add Codes Now'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowAddBulkModal(false)}
                   className="bg-slate-800 text-slate-300 text-xs px-4 py-2.5 rounded-xl hover:bg-slate-700"
                 >
-                  إلغاء
+                  {t('closeModal')}
                 </button>
               </div>
             </form>

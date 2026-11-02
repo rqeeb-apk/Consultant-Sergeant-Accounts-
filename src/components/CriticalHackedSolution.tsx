@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { KeyRound, ShieldAlert, CheckCircle2, ChevronDown, ChevronUp, ExternalLink, HelpCircle } from 'lucide-react';
+import { KeyRound, CheckCircle2, ExternalLink } from 'lucide-react';
 import { PlatformConfig } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface CriticalHackedSolutionProps {
   currentPlatform: PlatformConfig;
 }
 
 export const CriticalHackedSolution: React.FC<CriticalHackedSolutionProps> = ({ currentPlatform }) => {
-  const [showExplanation, setShowExplanation] = useState(false);
+  const { language, t } = useLanguage();
+  const platformName = language === 'en' && currentPlatform.nameEn ? currentPlatform.nameEn : currentPlatform.nameAr;
 
   return (
-    <div id="hacked-solution-section" className="bg-white border-2 border-red-500/80 rounded-2xl p-5 sm:p-7 shadow-md mb-8 relative overflow-hidden" dir="rtl">
+    <div id="hacked-solution-section" className="bg-white border-2 border-red-500/80 rounded-2xl p-5 sm:p-7 shadow-md mb-8 relative overflow-hidden">
       {/* Accent strip */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-red-600"></div>
 
@@ -22,10 +24,10 @@ export const CriticalHackedSolution: React.FC<CriticalHackedSolutionProps> = ({ 
         <div className="space-y-2 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="bg-red-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-              إجابة مشكلتك المباشرة لـ {currentPlatform.nameAr}
+              {language === 'ar' ? `إجابة مشكلتك المباشرة لـ ${currentPlatform.nameAr}` : `Direct Problem Solution for ${platformName}`}
             </span>
             <span className="text-xs font-semibold text-slate-500">
-              حل أقفال المخترق والمصادقة
+              {language === 'ar' ? 'حل أقفال المخترق والمصادقة' : 'Hacker Lock & Auth Bypass'}
             </span>
           </div>
 
@@ -56,7 +58,7 @@ export const CriticalHackedSolution: React.FC<CriticalHackedSolutionProps> = ({ 
             <div key={idx} className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs flex flex-col justify-between">
               <div>
                 <div className="text-[11px] font-bold text-blue-600 mb-1">
-                  المرحلة {idx + 1}:
+                  {language === 'ar' ? `المرحلة ${idx + 1}:` : `Stage ${idx + 1}:`}
                 </div>
                 <h4 className="text-xs font-bold text-slate-900 mb-1.5">
                   {st.stepTitle}
@@ -80,7 +82,7 @@ export const CriticalHackedSolution: React.FC<CriticalHackedSolutionProps> = ({ 
         <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200">
           <div className="text-xs text-slate-600 flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>اتبع هذه الخطوات بالترتيب مباشرة داخل البوابة الرسمية</span>
+            <span>{language === 'ar' ? 'اتبع هذه الخطوات بالترتيب مباشرة داخل البوابة الرسمية' : 'Follow these sequential steps directly inside the official portal'}</span>
           </div>
 
           <a

@@ -9,13 +9,15 @@ import {
   ExternalLink, 
   MessageCircle, 
   Headphones, 
-  CheckCircle2, 
-  ShieldCheck 
+  CheckCircle2
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const OwnerContactCard: React.FC = () => {
+  const { language, t } = useLanguage();
+
   return (
-    <section className="bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-blue-900/40 mb-8 relative overflow-hidden" dir="rtl">
+    <section className="bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-blue-900/40 mb-8 relative overflow-hidden">
       {/* Background glow effects */}
       <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -30,18 +32,20 @@ export const OwnerContactCard: React.FC = () => {
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30 px-3 py-0.5 rounded-full">
-                  خدمة الدعم المباشر والاستشارات
+                  {language === 'ar' ? 'خدمة الدعم المباشر والاستشارات' : 'Direct Support & Security Consulting'}
                 </span>
                 <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>معتمد وموثق</span>
+                  <span>{language === 'ar' ? 'معتمد وموثق' : 'Verified & Official'}</span>
                 </span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                تواصل مع المالك / الدعم الفني ({OWNER_CONTACT.brandName})
+                {language === 'ar' ? `تواصل مع المالك / الدعم الفني (${OWNER_CONTACT.brandName})` : `Contact Owner / Support (${OWNER_CONTACT.brandName})`}
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">
-                لأي استفسار تقني، مساعدة متقدمة في فك القيود والأقفال، أو استعادة الحسابات المعقدة عبر القنوات المعتمدة:
+                {language === 'ar' 
+                  ? 'لأي استفسار تقني، مساعدة متقدمة في فك القيود والأقفال، أو استعادة الحسابات المعقدة عبر القنوات المعتمدة:'
+                  : 'For technical inquiries, assistance with complex account recovery, or security consulting:'}
               </p>
             </div>
           </div>
@@ -55,7 +59,7 @@ export const OwnerContactCard: React.FC = () => {
             id="btn-telegram-bot-header"
           >
             <Send className="w-4 h-4" />
-            <span>بوت التيليجرام: {OWNER_CONTACT.telegramBotUsername}</span>
+            <span>{t('telegramBot')}: {OWNER_CONTACT.telegramBotUsername}</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -69,7 +73,7 @@ export const OwnerContactCard: React.FC = () => {
                 <Phone className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs text-slate-400 font-medium">رقم الهاتف / الاتصال المباشر</div>
+                <div className="text-xs text-slate-400 font-medium">{language === 'ar' ? 'رقم الهاتف / الاتصال المباشر' : 'Direct Phone Contact'}</div>
                 <div className="font-mono text-sm sm:text-base font-bold text-white" dir="ltr">
                   {OWNER_CONTACT.phoneFormatted}
                 </div>
@@ -83,7 +87,7 @@ export const OwnerContactCard: React.FC = () => {
                 id="btn-call-owner"
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span>اتصال هاتف</span>
+                <span>{language === 'ar' ? 'اتصال هاتف' : 'Call'}</span>
               </a>
               <a
                 href={OWNER_CONTACT.whatsappUrl}
@@ -93,7 +97,7 @@ export const OwnerContactCard: React.FC = () => {
                 id="btn-whatsapp-owner"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                <span>واتساب</span>
+                <span>{language === 'ar' ? 'واتساب' : 'WhatsApp'}</span>
               </a>
             </div>
           </div>
@@ -105,7 +109,7 @@ export const OwnerContactCard: React.FC = () => {
                 <Mail className="w-5 h-5" />
               </div>
               <div className="overflow-hidden">
-                <div className="text-xs text-slate-400 font-medium">البريد الإلكتروني المعتمد</div>
+                <div className="text-xs text-slate-400 font-medium">{language === 'ar' ? 'البريد الإلكتروني المعتمد' : 'Official Email'}</div>
                 <div className="font-mono text-xs sm:text-sm font-bold text-white truncate" dir="ltr">
                   {OWNER_CONTACT.email}
                 </div>
@@ -118,7 +122,7 @@ export const OwnerContactCard: React.FC = () => {
               id="btn-email-owner"
             >
               <Mail className="w-3.5 h-3.5" />
-              <span>إرسال بريد إلكتروني مباشر</span>
+              <span>{language === 'ar' ? 'إرسال بريد إلكتروني مباشر' : 'Send Direct Email'}</span>
             </a>
           </div>
 
@@ -129,7 +133,7 @@ export const OwnerContactCard: React.FC = () => {
                 <Send className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs text-slate-400 font-medium">بوت التيليجرام الرسمي للتواصل</div>
+                <div className="text-xs text-slate-400 font-medium">{language === 'ar' ? 'بوت التيليجرام الرسمي للتواصل' : 'Official Telegram Bot'}</div>
                 <div className="font-mono text-xs sm:text-sm font-bold text-white" dir="ltr">
                   {OWNER_CONTACT.telegramBotUsername}
                 </div>
@@ -144,7 +148,7 @@ export const OwnerContactCard: React.FC = () => {
               id="btn-open-telegram-bot"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>بدء المحادثة في التيليجرام</span>
+              <span>{language === 'ar' ? 'بدء المحادثة في التيليجرام' : 'Start Telegram Chat'}</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>
@@ -154,7 +158,7 @@ export const OwnerContactCard: React.FC = () => {
         <div className="pt-2">
           <div className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-2">
             <Globe className="w-4 h-4 text-blue-400" />
-            <span>مواقع ومنصات المالك الرسمية:</span>
+            <span>{language === 'ar' ? 'مواقع ومنصات المالك الرسمية:' : 'Official Owner Websites:'}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

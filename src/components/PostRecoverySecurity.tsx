@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { PlatformConfig } from '../types';
 import { Shield, CheckSquare, Square, ExternalLink } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface PostRecoverySecurityProps {
   currentPlatform: PlatformConfig;
 }
 
 export const PostRecoverySecurity: React.FC<PostRecoverySecurityProps> = ({ currentPlatform }) => {
+  const { language, t } = useLanguage();
   const checklist = currentPlatform.postSecurityChecklist;
   const [completedItems, setCompletedItems] = useState<string[]>([]);
+
+  const platformName = language === 'en' && currentPlatform.nameEn ? currentPlatform.nameEn : currentPlatform.nameAr;
 
   useEffect(() => {
     setCompletedItems([]);
@@ -23,24 +27,24 @@ export const PostRecoverySecurity: React.FC<PostRecoverySecurityProps> = ({ curr
   };
 
   return (
-    <section id="post-recovery-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="post-recovery-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
             <Shield className="w-6 h-6" />
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-              قائمة التحصين وطرد المخترق بعد استرجاع {currentPlatform.nameAr}
+              {language === 'ar' ? `قائمة التحصين وطرد المخترق بعد استرجاع ${currentPlatform.nameAr}` : `Eviction & Post-Recovery Checklist for ${platformName}`}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500">
-              قم بإنهاء هذه الخطوات خلال الدقائق الأولى من استعادة الحساب لمنع المخترق من العودة ثانية
+              {language === 'ar' ? 'قم بإنهاء هذه الخطوات خلال الدقائق الأولى من استعادة الحساب لمنع المخترق من العودة ثانية' : 'Execute these steps immediately upon regaining access to permanently expel the intruder'}
             </p>
           </div>
         </div>
 
         <div className="text-xs font-semibold bg-purple-50 text-purple-700 px-3 py-1 rounded-full border border-purple-200 hidden sm:block">
-          تم إنجاز {completedItems.length} من {checklist.length}
+          {language === 'ar' ? `تم إنجاز ${completedItems.length} من ${checklist.length}` : `Completed ${completedItems.length} of ${checklist.length}`}
         </div>
       </div>
 
@@ -85,10 +89,10 @@ export const PostRecoverySecurity: React.FC<PostRecoverySecurityProps> = ({ curr
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-2xs shrink-0"
-                  title="فتح إعدادات الأمان الرسمية"
+                  className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-2xs shrink-0 cursor-pointer"
+                  title={language === 'ar' ? 'فتح إعدادات الأمان الرسمية' : 'Open Official Settings'}
                 >
-                  <span>فتح</span>
+                  <span>{language === 'ar' ? 'فتح' : 'Open'}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               )}

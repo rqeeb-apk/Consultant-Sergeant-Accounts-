@@ -1,24 +1,28 @@
 import React from 'react';
 import { PlatformConfig } from '../types';
 import { ShieldCheck, AlertTriangle, ExternalLink } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface StepByStepGuideProps {
   currentPlatform: PlatformConfig;
 }
 
 export const StepByStepGuide: React.FC<StepByStepGuideProps> = ({ currentPlatform }) => {
+  const { language, t } = useLanguage();
+  const platformName = language === 'en' && currentPlatform.nameEn ? currentPlatform.nameEn : currentPlatform.nameAr;
+
   return (
-    <section id="step-roadmap-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8" dir="rtl">
+    <section id="step-roadmap-section" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-sm mb-8">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
           <ShieldCheck className="w-6 h-6" />
         </div>
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-            خارطة الطريق الرسمية لاسترداد حساب {currentPlatform.nameAr} خطوة بخطوة
+            {language === 'ar' ? `خارطة الطريق الرسمية لاسترداد حساب ${currentPlatform.nameAr} خطوة بخطوة` : `Official Step-by-Step Recovery Roadmap for ${platformName}`}
           </h3>
           <p className="text-xs sm:text-sm text-slate-500">
-            اتبع هذه المراحل بدقة لاستعادة السيطرة الكاملة على الحساب وطرد المخترق
+            {language === 'ar' ? 'اتبع هذه المراحل بدقة لاستعادة السيطرة الكاملة على الحساب وطرد المخترق' : 'Follow these precise sequential stages to regain full account ownership'}
           </p>
         </div>
       </div>
@@ -47,7 +51,7 @@ export const StepByStepGuide: React.FC<StepByStepGuideProps> = ({ currentPlatfor
                 <ul className="space-y-1.5 text-xs text-slate-600 pt-1">
                   {step.details.map((detail, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <span className="text-emerald-600 mt-0.5 font-bold">✓</span>
+                      <span className="text-emerald-600 font-bold">✓</span>
                       <span className="leading-relaxed">{detail}</span>
                     </li>
                   ))}
