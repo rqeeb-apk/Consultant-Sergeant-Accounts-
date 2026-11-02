@@ -42,29 +42,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   const platformName = language === 'en' && currentPlatform.nameEn ? currentPlatform.nameEn : currentPlatform.nameAr;
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 select-none w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-1.5 sm:gap-2 w-full max-w-full">
         
         {/* Brand Logo & Title with 20-Click Trigger & AppLogo (Letter R) */}
         <div 
           onClick={handleLogoClick}
-          className="flex items-center gap-2 sm:gap-3 cursor-pointer group relative shrink-0"
+          className="flex items-center gap-1.5 sm:gap-3 cursor-pointer group relative shrink min-w-0"
           title={t('logoTooltip')}
           id="btn-navbar-logo-trigger"
         >
           {/* App Logo Component with Letter R */}
           <AppLogo size="md" />
 
-          <div>
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <h1 className="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 leading-tight">
+          <div className="min-w-0 truncate">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <h1 className="text-xs sm:text-base md:text-lg font-extrabold text-slate-900 leading-tight truncate">
                 {t('appTitle')}
               </h1>
-              <span className="text-[10px] sm:text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full border border-red-200 whitespace-nowrap">
+              <span className="hidden sm:inline-block text-[10px] sm:text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full border border-red-200 whitespace-nowrap shrink-0">
                 {t('appSubTitle')}
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 hidden sm:block">
+            <p className="text-[11px] text-slate-500 hidden md:block truncate">
               {OWNER_CONTACT.brandName} • {t('appDesc')}
             </p>
           </div>
@@ -78,23 +78,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Action Controls & Navigation Items */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
 
           {/* Language Switcher Toggle (Arabic / English) */}
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-2.5 sm:px-3 py-2 rounded-xl transition cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl transition cursor-pointer shrink-0 shadow-2xs"
             id="nav-btn-language-toggle"
             title={t('langToggleTitle')}
           >
-            <Globe className="w-4 h-4 text-slate-700" />
-            <span className="font-extrabold text-slate-900">{t('langName')}</span>
+            <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700" />
+            <span className="font-extrabold text-slate-900 text-[11px] sm:text-xs">{t('langName')}</span>
           </button>
 
           {/* Notification Bell Button */}
           <a
             href="#notification-center-section"
-            className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition cursor-pointer shrink-0"
+            className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition cursor-pointer shrink-0"
             id="nav-btn-notifications"
             title={t('notificationsTitle')}
           >
@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onOpenInstallModal();
               }
             }}
-            className="flex items-center gap-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold px-2.5 sm:px-3 py-2 rounded-xl transition cursor-pointer shrink-0"
+            className="flex items-center gap-1 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl transition cursor-pointer shrink-0"
             id="nav-btn-install-pwa"
             title={t('installTitle')}
           >
@@ -143,13 +143,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             href={OWNER_CONTACT.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-2.5 sm:px-3.5 py-2 rounded-xl transition shadow-xs shrink-0"
+            className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition shadow-xs shrink-0"
             id="nav-owner-whatsapp"
             title={t('whatsappTitle')}
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden md:inline">{t('whatsappContact')}</span>
-            <span className="md:hidden">{t('whatsappMobile')}</span>
+            <span className="md:hidden text-[11px] sm:text-xs">{t('whatsappMobile')}</span>
           </a>
 
           {/* Direct Platform Link */}

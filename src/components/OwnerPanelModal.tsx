@@ -227,7 +227,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <input
                   type="email"
                   required
-                  placeholder="rqeebpro@gmail.com"
+                  placeholder="name@example.com"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono"
@@ -242,7 +242,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                   type="text"
                   required
                   maxLength={10}
-                  placeholder="PIN"
+                  placeholder="••••"
                   value={loginPin}
                   onChange={(e) => setLoginPin(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono tracking-widest font-bold"
@@ -573,7 +573,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   {/* Wallet Phone Number */}
                   <div className="space-y-1 bg-slate-800 p-4 rounded-2xl border border-slate-700">
-                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'رقم محفظة جيب والمحافظ (785502919):' : 'Wallet Phone Number:'}</label>
+                    <label className="block font-bold text-slate-200">{language === 'ar' ? 'رقم محفظة جيب والمحافظ المعتمد:' : 'Wallet Phone Number:'}</label>
                     <input
                       type="text"
                       value={editConfig.walletPhone}
@@ -745,7 +745,7 @@ export const OwnerPanelModal: React.FC<OwnerPanelModalProps> = ({
                 <textarea
                   rows={6}
                   required
-                  placeholder="R-9999-gmail&#10;R-8888-face&#10;R-7777-whats"
+                  placeholder={language === 'ar' ? 'أدخل الأكواد الجديدة هنا (كود في كل سطر)...' : 'Enter new codes here (one per line)...'}
                   value={bulkInput}
                   onChange={(e) => setBulkInput(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white font-mono leading-relaxed"
